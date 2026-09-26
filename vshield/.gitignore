@@ -1,0 +1,20 @@
+# Python
+backend/.venv/
+tools/.venv-clone/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Models are downloaded on first run (~2 GB); never commit them
+backend/models/cache/
+
+# Privacy: never commit voiceprints, logs or evaluation audio
+backend/data/enrollments/
+backend/data/logs/
+backend/data/eval/
+backend/data/test/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+backend/certs/

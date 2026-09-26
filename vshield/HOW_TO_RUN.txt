@@ -1,0 +1,181 @@
+V-SHIELD: HOW TO RUN
+SIH 2026 · SIH26104 · Team NoNsEnSe
+=========================================================================================
+
+WHAT YOU NEED
+  - Python 3.11 (3.10 to 3.12 should also work)
+  - Node.js 20 or newer (only to build the web page)
+  - About 3 GB of free disk. The first run downloads the AI models (~2 GB), so you need
+    internet once; after that everything works offline.
+  - Chrome or Edge
+  - Headphones if both people on a call are in the same room
+
+
+-----------------------------------------------------------------------------------------
+1. ONE-TIME SETUP
+-----------------------------------------------------------------------------------------
+
+  Mac / Linux (from the vshield folder):
+
+    cd backend
+    python3.11 -m venv .venv
+    .venv/bin/pip install -r ../requirements.txt
+    .venv/bin/python scripts/setup_demo.py
+    cd ../frontend
+    npm install
+    npm run build
+
+  Windows (PowerShell, from the vshield folder):
+
+    cd backend
+    py -3.11 -m venv .venv
+    .venv\Scripts\pip install -r ..\requirements.txt
+    .venv\Scripts\python scripts\setup_demo.py
+    cd ..\frontend
+    npm install
+    npm run build
+
+  setup_demo.py downloads a public-domain test voice and enrolls it as the demo
+  "CEO" (Rajesh Mehta). The first time, it also downloads the models, which takes a
+  few minutes. Running it again is harmless.
+
+
+-----------------------------------------------------------------------------------------
+2. START THE SERVER
+-----------------------------------------------------------------------------------------
+
+  Mac / Linux:   ./run.sh                      (from the vshield folder)
+  Windows:       cd backend
+                 .venv\Scripts\python -m uvicorn vshield.server:app --host 127.0.0.1 --port 8000
+
+  Wait for "Models ready" in the terminal, then open:   http://127.0.0.1:8000
+  Stop the server with Ctrl+C.
+
+  Always open the http:// address above. Opening index.html directly from the
+  folder (a file:// page) shows a page where nothing works.
+
+
+-----------------------------------------------------------------------------------------
+3. USE IT
+-----------------------------------------------------------------------------------------
+
+  A) TWO-PERSON CALL, one laptop (easiest way to try it)
+     1. Open http://127.0.0.1:8000 and click "Start a call". Copy the link.
+     2. Open the link in a second browser window.
+     3. In each window, type a name, pick the "Caller ID the other person sees",
+        and click "Join call".
+          - Receiver (e.g. "Anjali (Accounts)"): caller ID "None"
+          - Caller / scammer: e.g. "Rajesh Mehta (CEO)" (a spoofed ID) or "Unknown number"
+     4. Talk, or use "Send audio into the call" to play a demo clip (e.g. the cloned CEO).
+        The receiver's screen shows V-Shield: risk gauge, what to do, the scam-script
+        tracker, the four signals and what the caller said.
+
+  B) TWO-PERSON CALL, two laptops on the same Wi-Fi
+     Browsers only allow the microphone on localhost or HTTPS, so use LAN mode:
+
+       Mac / Linux host:   ./run.sh --lan     → prints https://<your-ip>:8443
+
+     Open that address on BOTH laptops. The browser warns about the certificate
+     (it's self-signed): click "Advanced" → "Proceed". There's no login, so only
+     do this on a network you trust. macOS may ask to allow Python to accept
+     connections: allow it.
+
+     Windows host: find your IP with "ipconfig" (IPv4 Address). Then, in Git Bash
+     (it includes openssl), from the backend folder, create a certificate once:
+       mkdir -p certs
+       openssl req -x509 -newkey rsa:2048 -nodes -days 30 -subj "/CN=V-Shield" -addext "subjectAltName=IP:<your-ip>" -keyout certs/key.pem -out certs/cert.pem
+     and start the server (PowerShell, from backend):
+       .venv\Scripts\python -m uvicorn vshield.server:app --host 0.0.0.0 --port 8443 --ssl-keyfile certs\key.pem --ssl-certfile certs\cert.pem
+
+  C) LAB (one person, no call)
+     http://127.0.0.1:8000/?lab   Play clips or use the mic into a monitored call,
+     enroll voices ("Enroll a voice", 15 s from the mic) and test V-Shield alone.
+
+
+-----------------------------------------------------------------------------------------
+4. DEMO SCRIPT (two-person call)
+-----------------------------------------------------------------------------------------
+
+  1. Caller joins as "Rajesh Mehta (CEO)" and talks normally
+     → receiver sees "No warning signs so far" (green).
+  2. Caller sends "Cloned CEO (F5-TTS) · ₹25 lakh transfer"
+     → speaker check is fooled, but the tracker reaches "Ask"
+     → CRITICAL: "Hold the transaction".
+  3. Caller rejoins as "Unknown number" and sends the "digital arrest" scam script
+     → tracker climbs BEFORE the money request:
+       heading into scam territory → scam script in progress → scam request made.
+  4. Receiver clicks "Challenge the caller"
+     → a random phrase pops up on the caller's screen.
+     Caller answers with "Pre-recorded reply"
+     → "too slow" + "phrase not repeated".
+
+  For your real demo, enroll your own volunteer as the CEO first: in a genuine call,
+  the receiver clicks "Enroll this caller's voice", or use Lab → "Enroll a voice".
+
+
+-----------------------------------------------------------------------------------------
+5. CHECK EVERYTHING WORKS (do this before every demo)
+-----------------------------------------------------------------------------------------
+
+  With the server running, in a second terminal (from backend):
+
+    .venv/bin/python -m pytest -q                  expect: 35 passed
+    .venv/bin/python scripts/check_scenes.py       expect: 8/8 scenes as expected
+
+  (Windows: use .venv\Scripts\python instead of .venv/bin/python.)
+
+
+-----------------------------------------------------------------------------------------
+6. OPTIONAL: MAKE YOUR OWN VOICE CLONES (only with the person's consent)
+-----------------------------------------------------------------------------------------
+
+  Uses F5-TTS in its own environment (its libraries conflict with the backend):
+
+    cd tools
+    python3.11 -m venv .venv-clone
+    .venv-clone/bin/pip install -r requirements-clone.txt
+    cd ..
+    tools/.venv-clone/bin/python backend/scripts/make_clone.py \
+        --ref me.wav --ref-text "exact words spoken in me.wav" \
+        --text "Transfer twenty five lakh rupees to the new vendor account right now." \
+        --out backend/data/demo/my_clone.wav
+
+  Then play it with "Send your own clip…" in a call. The clone model speaks English and
+  Chinese only.
+
+
+-----------------------------------------------------------------------------------------
+7. TROUBLESHOOTING
+-----------------------------------------------------------------------------------------
+
+  Buttons do nothing / blank page
+      You opened a file:// page. Use http://127.0.0.1:8000 (or the https LAN address).
+
+  "Server offline" or "Loading models…"
+      The server isn't running yet, or is still downloading models on the first run.
+
+  "No microphone"
+      Allow the mic in the browser's address-bar permissions. The second laptop must
+      use the https:// LAN address. You can still send clips without a mic.
+
+  Echo or feedback
+      Use headphones.
+
+  Changed the web page code but see no difference
+      Run "npm run build" in frontend, then restart the server.
+
+  Port 8000 already in use
+      Another server is still running: stop it (Ctrl+C in its terminal). Or start
+      uvicorn yourself with --port 8001 and open http://127.0.0.1:8001
+
+  Speaker check says a genuine person doesn't match
+      Re-enroll them in the same setup you'll demo with (same mic or call), for at
+      least 15 s of clear speech.
+
+  Slow updates on a laptop without an Apple-silicon GPU
+      Everything runs on the CPU there. It was only measured on an M-series Mac
+      (~230 ms per update). If updates lag, use a smaller speech model:
+        Mac/Linux:  ASR_MODEL=tiny ./run.sh
+        Windows:    set ASR_MODEL=tiny   (then start the server)
+
+  More detail: README.md (how it works, measured results, known limitations).

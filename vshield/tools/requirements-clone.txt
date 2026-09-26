@@ -1,0 +1,10 @@
+# Optional: voice-cloning tool for making realistic attack clips (scripts/make_clone.py).
+# Install in its OWN environment: its pinned libraries conflict with the backend.
+#
+#   cd tools
+#   python3.11 -m venv .venv-clone
+#   .venv-clone/bin/pip install -r requirements-clone.txt
+#
+# F5-TTS model weights are CC-BY-NC 4.0: fine for a hackathon demo, not for commercial use.
+# Only clone the voices of people who have agreed to it.
+f5-tts==1.1.22

@@ -1,0 +1,40 @@
+# V-Shield backend: Python dependencies (Python 3.11 recommended; 3.10-3.12 should work)
+# Exact versions below are the ones the prototype was built and tested with.
+#
+#   cd backend
+#   python3.11 -m venv .venv            (or: uv venv --python 3.11 .venv)
+#   .venv/bin/pip install -r ../requirements.txt        Windows: .venv\Scripts\pip install -r ..\requirements.txt
+#
+# The web dashboard's dependencies are in frontend/package.json (npm install).
+# The optional voice-cloning tool has its own list: tools/requirements-clone.txt.
+
+# --- web server
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+websockets==17.1
+
+# --- audio + numerics
+numpy==2.4.6
+scipy==1.17.1
+soundfile==0.14.0
+
+# --- models: deepfake detector (A), speaker check (S), speech-to-text (C), voice activity
+torch==2.14.0
+torchaudio==2.11.0
+transformers==5.17.0
+huggingface-hub==1.33.0
+speechbrain==1.1.1
+faster-whisper==1.2.1
+silero-vad==6.2.3
+
+# --- speech-behaviour features (B): pitch, jitter, shimmer
+praat-parselmouth==0.4.7
+
+# --- scripts: demo setup, enrollment CLI, detector benchmark, fusion fitting
+pandas==3.0.6
+pyarrow==25.0.1
+requests==2.34.2
+scikit-learn==1.9.1
+
+# --- tests
+pytest==9.1.1

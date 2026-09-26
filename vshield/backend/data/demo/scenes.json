@@ -1,0 +1,58 @@
+{
+ "clips": [
+  {
+   "file": "ceo_genuine_1.wav",
+   "label": "Genuine CEO · routine (9.7s)",
+   "kind": "genuine",
+   "note": "LibriSpeech speaker 1272, the voice enrolled as 'ceo'. Replace with your own recordings."
+  },
+  {
+   "file": "ceo_genuine_2.wav",
+   "label": "Genuine CEO · second clip (10.7s)",
+   "kind": "genuine",
+   "note": "Also speaker 1272. For the challenge demo, the real person repeats the phrase live on the mic."
+  },
+  {
+   "file": "clone_ceo_routine.wav",
+   "label": "Cloned CEO (F5-TTS) · routine request",
+   "kind": "synthetic",
+   "note": "F5-TTS clone of the enrolled CEO voice (public-domain LibriSpeech speaker). Make your own with scripts/make_clone.py, from a consenting volunteer."
+  },
+  {
+   "file": "clone_ceo_fraud.wav",
+   "label": "Cloned CEO (F5-TTS) · ₹25 lakh transfer",
+   "kind": "synthetic",
+   "note": "F5-TTS clone of the enrolled CEO voice (public-domain LibriSpeech speaker). Make your own with scripts/make_clone.py, from a consenting volunteer."
+  },
+  {
+   "file": "scam_digital_arrest.wav",
+   "label": "Unknown caller · “digital arrest” scam script",
+   "kind": "synthetic",
+   "note": "Walks through hook → pressure → isolation → ask with pauses, so the scam tracker climbs before the money request. Use with caller ID 'Unknown number'."
+  },
+  {
+   "file": "synthetic_routine.wav",
+   "label": "Synthetic voice · routine request",
+   "kind": "synthetic",
+   "note": "macOS text-to-speech: a stand-in for a real voice clone. Replace with clones made by scripts/make_clone.py."
+  },
+  {
+   "file": "synthetic_fraud_en.wav",
+   "label": "Synthetic voice · ₹25 lakh transfer (English)",
+   "kind": "synthetic",
+   "note": "macOS text-to-speech: a stand-in for a real voice clone. Replace with clones made by scripts/make_clone.py."
+  },
+  {
+   "file": "synthetic_fraud_hi.wav",
+   "label": "Synthetic voice · ₹25 lakh transfer (Hindi)",
+   "kind": "synthetic",
+   "note": "macOS text-to-speech: a stand-in for a real voice clone. Replace with clones made by scripts/make_clone.py."
+  },
+  {
+   "file": "prerecorded_reply.wav",
+   "label": "Pre-recorded reply to a challenge",
+   "kind": "reply",
+   "note": "A fixed 'blue mango seventeen': it can't match a random challenge phrase."
+  }
+ ]
+}

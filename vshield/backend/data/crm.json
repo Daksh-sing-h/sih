@@ -1,0 +1,28 @@
+{
+  "_comment": "Mock caller database for the Context signal. Replace with the bank's CRM / telco lookup. 'enrollment' links a caller to the voiceprint V-Shield verifies them against.",
+  "callers": {
+    "+91-98100-00001": {
+      "name": "Rajesh Mehta (CEO)",
+      "registered": true,
+      "role": "ceo",
+      "usual_requests": [
+        "reports",
+        "meetings",
+        "approvals"
+      ],
+      "max_usual_amount_inr": 0,
+      "enrollment": "ceo"
+    },
+    "+91-98100-00002": {
+      "name": "Priya Nair (CFO)",
+      "registered": true,
+      "role": "cfo",
+      "usual_requests": [
+        "payments",
+        "reports"
+      ],
+      "max_usual_amount_inr": 500000
+    }
+  },
+  "unknown_caller_claims_executive_boost": 0.35
+}
